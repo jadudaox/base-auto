@@ -1,9 +1,11 @@
+Here is an HTML document that creates a simplified "one-click" on-chain tool for daily GM/GN messages and contract deployment with low gas fees on Base Mainnet.
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>TUSK FARMER · Base Mainnet On-Chain Farmer</title>
+  <title>TUSK · Daily On-Chain GM/GN + Deploy</title>
   <style>
     * {
       margin: 0;
@@ -28,14 +30,14 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
       min-height: 100vh;
       padding: 0;
       margin: 0;
     }
 
     .app {
-      max-width: 760px;
+      max-width: 680px;
       margin: 0 auto;
       padding: 24px 20px 48px;
     }
@@ -53,39 +55,39 @@
     .logo {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     .logo-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
+      width: 48px;
+      height: 48px;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
-      box-shadow: 0 4px 12px rgba(37, 99, 255, 0.3);
+      font-size: 26px;
+      box-shadow: 0 6px 14px rgba(37, 99, 255, 0.3);
     }
 
     .logo-text {
       font-family: 'Space Mono', monospace;
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -0.3px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
     }
 
     .logo-sub {
       font-size: 11px;
       color: var(--muted);
-      margin-top: 2px;
+      margin-top: 4px;
     }
 
     .wallet-btn {
       font-family: 'Space Mono', monospace;
       font-size: 12px;
-      padding: 8px 16px;
-      border-radius: 40px;
+      padding: 10px 18px;
+      border-radius: 60px;
       border: 1px solid var(--border);
       background: var(--surface2);
       color: var(--text);
@@ -93,7 +95,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      transition: all 0.2s ease;
+      transition: all 0.2s;
       font-weight: 500;
     }
 
@@ -108,201 +110,183 @@
     }
 
     .dot {
-      width: 9px;
-      height: 9px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       background: var(--muted);
-      display: inline-block;
     }
 
     .dot.live {
       background: var(--green);
-      box-shadow: 0 0 6px var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 1.5s infinite;
     }
 
-    /* Gas bar */
-    .gas-bar {
+    @keyframes pulse {
+      0% { opacity: 0.5; transform: scale(0.9);}
+      100% { opacity: 1; transform: scale(1.2);}
+    }
+
+    /* Gas card */
+    .gas-panel {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 12px 16px;
-      margin-bottom: 20px;
+      border-radius: 24px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
       display: flex;
+      justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
-      font-size: 13px;
+      gap: 12px;
     }
 
-    .gas-val {
-      font-family: 'Space Mono', monospace;
+    .gas-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .gas-badge {
+      background: #1e293b;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-family: monospace;
+      font-size: 13px;
       font-weight: 700;
       color: var(--accent2);
     }
 
-    .chain-badge {
-      background: #1a2540;
-      color: var(--accent2);
-      font-family: monospace;
-      font-size: 11px;
-      padding: 4px 10px;
+    .chain-tag {
+      background: #0f172a;
+      border: 1px solid #2d3a5e;
+      padding: 5px 12px;
       border-radius: 30px;
-      margin-left: auto;
-    }
-
-    /* Stats */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 28px;
-    }
-
-    .stat {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 16px 12px;
-      text-align: center;
-    }
-
-    .stat-label {
       font-size: 11px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      margin-bottom: 6px;
+      font-family: monospace;
     }
 
-    .stat-value {
-      font-family: 'Space Mono', monospace;
-      font-size: 24px;
-      font-weight: 800;
-    }
-
-    .stat-value.green { color: var(--green); }
-    .stat-value.blue { color: var(--accent2); }
-    .stat-value.amber { color: var(--amber); }
-
-    /* tasks */
-    .tasks {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    /* One Click Hero */
+    .hero-card {
+      background: linear-gradient(145deg, #111827, #0b0f17);
+      border: 1px solid rgba(37, 99, 255, 0.4);
+      border-radius: 36px;
+      padding: 28px 20px;
+      text-align: center;
       margin-bottom: 28px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
     }
 
-    .task {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 14px 16px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      transition: all 0.2s;
+    .hero-title {
+      font-size: 28px;
+      font-weight: 800;
+      font-family: 'Space Mono', monospace;
+      background: linear-gradient(135deg, #fff, var(--accent2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 12px;
     }
 
-    .task.running { border-color: var(--accent); background: rgba(37, 99, 255, 0.05); }
-    .task.done { border-color: #1f4a2e; }
-    .task.failed { border-color: #8b2c3a; }
+    .hero-desc {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
 
-    .task-icon {
-      width: 44px;
-      height: 44px;
-      background: var(--surface2);
-      border-radius: 16px;
+    .oneclick-btn {
+      background: linear-gradient(135deg, var(--accent), #1a4cff);
+      border: none;
+      padding: 16px 32px;
+      border-radius: 80px;
+      font-family: 'Space Mono', monospace;
+      font-weight: 800;
+      font-size: 18px;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      gap: 12px;
+      box-shadow: 0 4px 14px rgba(37, 99, 255, 0.5);
     }
 
-    .task-body {
-      flex: 1;
+    .oneclick-btn:hover:not(:disabled) {
+      transform: scale(1.02);
+      box-shadow: 0 8px 25px rgba(37, 99, 255, 0.6);
+    }
+
+    .oneclick-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Task list small */
+    .tasks-preview {
+      background: var(--surface);
+      border-radius: 28px;
+      padding: 20px;
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .task-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .task-row:last-child {
+      border-bottom: none;
+    }
+
+    .task-status-icon {
+      width: 32px;
+      text-align: center;
+      font-size: 18px;
     }
 
     .task-name {
-      font-weight: 600;
-      font-size: 15px;
+      flex: 1;
+      font-weight: 500;
     }
 
-    .task-desc {
+    .task-badge {
       font-size: 11px;
-      color: var(--muted);
-      margin-top: 2px;
+      padding: 3px 10px;
+      border-radius: 30px;
+      background: #1f2937;
     }
 
-    .task-hash {
-      font-family: monospace;
-      font-size: 10px;
-      color: var(--accent2);
-      cursor: pointer;
-      margin-top: 6px;
-      text-decoration: underline;
-      text-decoration-thickness: 0.5px;
+    .task-badge.done {
+      background: #0b2e1f;
+      color: var(--green);
     }
 
-    .task-status {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 6px;
+    .task-badge.pending {
+      background: #2d2a1e;
+      color: var(--amber);
     }
 
-    .badge {
-      font-family: monospace;
-      font-size: 10px;
-      padding: 4px 10px;
-      border-radius: 40px;
-      font-weight: 700;
-    }
-
-    .badge.pending { background: #252a36; color: #9ca3af; }
-    .badge.running { background: #1e2a3a; color: var(--accent2); }
-    .badge.done { background: #0d2f1b; color: var(--green); }
-    .badge.failed { background: #33161c; color: var(--red); }
-
-    .run-btn {
-      font-family: monospace;
-      font-size: 11px;
-      padding: 4px 12px;
-      border-radius: 40px;
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
-      cursor: pointer;
-      transition: 0.15s;
-    }
-
-    .run-btn:hover:not(:disabled) {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .run-all-btn {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, var(--accent), #1447e6);
-      border: none;
-      border-radius: 40px;
-      font-family: 'Space Mono', monospace;
-      font-weight: 800;
-      font-size: 14px;
-      color: white;
-      cursor: pointer;
-      margin-bottom: 20px;
-      transition: 0.2s;
-    }
-
-    .run-all-btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(37, 99, 255, 0.4);
-    }
-
+    /* Controls */
     .controls {
       background: var(--surface);
-      border: 1px solid var(--border);
       border-radius: 24px;
       padding: 16px 18px;
       margin-bottom: 24px;
@@ -310,20 +294,15 @@
 
     .ctrl-row {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 10px 0;
-    }
-
-    .ctrl-row:not(:last-child) {
-      border-bottom: 1px solid var(--border);
+      align-items: center;
+      padding: 12px 0;
     }
 
     .toggle {
+      width: 44px;
+      height: 24px;
       position: relative;
-      width: 42px;
-      height: 22px;
-      display: inline-block;
     }
 
     .toggle input {
@@ -334,62 +313,66 @@
 
     .slider {
       position: absolute;
+      inset: 0;
+      background: #2d313e;
+      border-radius: 40px;
       cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #2d313e;
-      border-radius: 34px;
       transition: 0.2s;
     }
 
     .slider:before {
       content: "";
       position: absolute;
-      height: 16px;
-      width: 16px;
+      height: 18px;
+      width: 18px;
       left: 3px;
       bottom: 3px;
-      background-color: white;
+      background: white;
       border-radius: 50%;
       transition: 0.2s;
     }
 
     input:checked + .slider {
-      background-color: var(--accent);
+      background: var(--accent);
     }
 
     input:checked + .slider:before {
       transform: translateX(20px);
     }
 
-    .warning {
-      background: #1c1700;
-      border-left: 4px solid var(--amber);
-      border-radius: 16px;
-      padding: 14px 16px;
-      margin-bottom: 20px;
-      font-size: 12px;
-      color: #ffde9e;
-    }
-
+    /* Log */
     .log {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 14px;
-      max-height: 200px;
+      max-height: 220px;
       overflow-y: auto;
       font-family: 'Space Mono', monospace;
-      font-size: 11px;
+      font-size: 10px;
     }
 
-    .log-line .ts { color: #5f6c84; margin-right: 8px; }
+    .log-line {
+      padding: 4px 0;
+      border-bottom: 1px solid #1a1e2a;
+      word-break: break-all;
+    }
+
     .log-line .ok { color: var(--green); }
     .log-line .err { color: var(--red); }
     .log-line .info { color: var(--accent2); }
     .log-line .warn { color: var(--amber); }
+    .log-time { color: #4b5565; margin-right: 8px; }
+
+    .warning-note {
+      background: #1c1800;
+      border-radius: 16px;
+      padding: 12px 16px;
+      font-size: 11px;
+      color: #ffde9e;
+      margin-top: 12px;
+      border-left: 3px solid var(--amber);
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
 </head>
@@ -399,8 +382,8 @@
     <div class="logo">
       <div class="logo-icon">🌾</div>
       <div>
-        <div class="logo-text">TUSK FARMER</div>
-        <div class="logo-sub">Base Mainnet · Real On-Chain Activity</div>
+        <div class="logo-text">TUSK DAILY</div>
+        <div class="logo-sub">One-Click · Base Mainnet</div>
       </div>
     </div>
     <button class="wallet-btn" id="walletBtn">
@@ -409,353 +392,300 @@
     </button>
   </div>
 
-  <div class="warning">
-    ⚠️ <strong>REAL TRANSACTIONS</strong> — This tool sends real on-chain transactions on Base Mainnet via your wallet.<br>
-    Each click requires MetaMask approval. Only tiny amounts of ETH are used (0.00005–0.0002 ETH per task).<br>
-    🔐 You remain in full control. Nothing is executed without your explicit signature.
+  <div class="gas-panel">
+    <div class="gas-info">
+      <span>⛽ Gas price:</span>
+      <span class="gas-badge" id="gasPriceDisplay">— Gwei</span>
+      <span>≈ per tx:</span>
+      <span class="gas-badge" id="gasCostDisplay">— ETH</span>
+    </div>
+    <div class="chain-tag">🟢 Base (8453)</div>
   </div>
 
-  <div class="gas-bar">
-    <span class="dot live" id="gasDot"></span>
-    <span>⛽ Gas price:</span>
-    <span class="gas-val" id="gasPrice">—</span>
-    <span>Gwei</span>
-    <span>· Est. per tx:</span>
-    <span class="gas-val" id="gasCost">—</span>
-    <span>ETH</span>
-    <span class="chain-badge">Base (Chain ID: 8453)</span>
+  <div class="hero-card">
+    <div class="hero-title">⚡ ONE CLICK FARM</div>
+    <div class="hero-desc">GM · GN · Contract Deploy — all on-chain with minimal gas</div>
+    <button class="oneclick-btn" id="farmNowBtn">
+      🌿 START DAILY TASKS
+    </button>
+    <div class="warning-note" style="margin-top: 20px;">
+      💡 Real Base Mainnet transactions. Each action costs ~0.00002–0.0001 ETH. You approve each signature.
+    </div>
   </div>
 
-  <div class="stats">
-    <div class="stat"><div class="stat-label">✅ Done Today</div><div class="stat-value green" id="statDone">0/6</div></div>
-    <div class="stat"><div class="stat-label">💰 ETH Spent</div><div class="stat-value amber" id="statSpent">0.000000</div></div>
-    <div class="stat"><div class="stat-label">🎯 Airdrop Score</div><div class="stat-value blue" id="statScore">0 pts</div></div>
+  <div class="tasks-preview">
+    <div class="section-title">📋 TODAY'S ON-CHAIN ACTIONS</div>
+    <div id="taskStatusList">
+      <div class="task-row"><div class="task-status-icon">🌅</div><div class="task-name">GM Message</div><span id="gmBadge" class="task-badge pending">pending</span></div>
+      <div class="task-row"><div class="task-status-icon">🌙</div><div class="task-name">GN Message</div><span id="gnBadge" class="task-badge pending">pending</span></div>
+      <div class="task-row"><div class="task-status-icon">📦</div><div class="task-name">Deploy Contract</div><span id="deployBadge" class="task-badge pending">pending</span></div>
+    </div>
   </div>
-
-  <div id="taskList" class="tasks"></div>
-
-  <button class="run-all-btn" id="runAllBtn">⚡ RUN ALL TASKS (Connect wallet)</button>
 
   <div class="controls">
     <div class="ctrl-row">
-      <div><div class="ctrl-label">⚡ Wait for low gas</div><div class="ctrl-sub">Only execute if gas < 0.02 Gwei (Base is cheap)</div></div>
-      <label class="toggle"><input type="checkbox" id="gasWaitToggle" checked><span class="slider"></span></label>
+      <div><strong>🪙 Low gas mode</strong><br><span style="font-size: 11px; color: var(--muted);">Wait if gas > 0.03 Gwei (Base cheap)</span></div>
+      <label class="toggle"><input type="checkbox" id="lowGasToggle" checked><span class="slider"></span></label>
     </div>
     <div class="ctrl-row">
-      <div><div class="ctrl-label">🎲 Randomize amounts</div><div class="ctrl-sub">Slight variations for organic on-chain activity</div></div>
-      <label class="toggle"><input type="checkbox" id="randToggle" checked><span class="slider"></span></label>
-    </div>
-    <div class="ctrl-row">
-      <div><div class="ctrl-label">🔄 Skip completed today</div><div class="ctrl-sub">Prevents re-running finished tasks in same session</div></div>
-      <label class="toggle"><input type="checkbox" id="skipToggle" checked><span class="slider"></span></label>
+      <div><strong>🔄 Skip done today</strong><br><span style="font-size: 11px; color: var(--muted);">Don't re-run completed tasks</span></div>
+      <label class="toggle"><input type="checkbox" id="skipDoneToggle" checked><span class="slider"></span></label>
     </div>
   </div>
 
   <div class="log" id="logBox">
-    <div class="log-line"><span class="ts">[--:--:--]</span> <span class="info">🌱 TUSK FARMER ready — click "Connect Wallet" and approve Base network.</span></div>
+    <div class="log-line"><span class="log-time">[--:--:--]</span> <span class="info">🌾 Ready — connect MetaMask on Base Mainnet</span></div>
   </div>
 </div>
 
 <script>
-  // ----- BASE MAINNET STABLE CONTRACTS -----
-  const CONTRACTS = {
-    USDC: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
-    WETH: '0x4200000000000000000000000000000000000006',
-    AERO_ROUTER: '0xcF77a3Ba9A5CA399B7c97c74d54e5b1Beb874E43',
-    BASE_BRIDGE: '0x4200000000000000000000000000000000000010'
-  };
-
-  // Task definitions
-  const TASKS = [
-    { id: 'swap', icon: '🔄', name: 'Aerodrome Swap', desc: 'Swap 0.0001 ETH → USDC', pts: 20 },
-    { id: 'deploy', icon: '📄', name: 'Contract Deploy', desc: 'Deploy storage contract on Base', pts: 30 },
-    { id: 'bridge', icon: '🌉', name: 'Bridge Deposit', desc: 'Deposit 0.00005 ETH to Base bridge', pts: 25 },
-    { id: 'selfcall', icon: '💡', name: 'Contract Call', desc: 'Store timestamp on deployed contract', pts: 20 },
-    { id: 'nft', icon: '🖼️', name: 'NFT Activity', desc: 'Mint on-chain inscription proxy', pts: 25 },
-    { id: 'multisend', icon: '📤', name: 'Multi Transfer', desc: 'Send 0 ETH to multiple addresses', pts: 15 }
-  ];
-
+  // ---------- STATE ----------
   let provider = null;
   let signer = null;
   let userAddress = null;
-  let taskState = {};
-  let totalSpentEth = 0;
-  let isRunningAll = false;
+  let isFarming = false;
 
-  // helper random 
-  function randBetween(min, max) { return min + Math.random() * (max - min); }
-  function jitterAmount(baseEth) {
-    if (!document.getElementById('randToggle')?.checked) return baseEth;
-    const factor = randBetween(0.85, 1.2);
-    return baseEth * factor;
+  // tasks status (GM, GN, DEPLOY)
+  let tasksDone = {
+    gm: false,
+    gn: false,
+    deploy: false
+  };
+
+  // optional persist in localStorage for daily skip
+  function loadDailyState() {
+    const today = new Date().toDateString();
+    const saved = localStorage.getItem('tusk_daily');
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        if (data.date === today) {
+          tasksDone = data.tasksDone || { gm: false, gn: false, deploy: false };
+        } else {
+          tasksDone = { gm: false, gn: false, deploy: false };
+        }
+      } catch(e) {}
+    } else {
+      tasksDone = { gm: false, gn: false, deploy: false };
+    }
+    updateTaskUI();
   }
 
-  // reset init state
-  TASKS.forEach(t => {
-    taskState[t.id] = { status: 'pending', hash: null, txHash: null };
-  });
+  function persistDaily() {
+    const today = new Date().toDateString();
+    localStorage.setItem('tusk_daily', JSON.stringify({
+      date: today,
+      tasksDone: tasksDone
+    }));
+  }
+
+  function updateTaskUI() {
+    document.getElementById('gmBadge').innerText = tasksDone.gm ? 'done ✓' : 'pending';
+    document.getElementById('gmBadge').className = tasksDone.gm ? 'task-badge done' : 'task-badge pending';
+    document.getElementById('gnBadge').innerText = tasksDone.gn ? 'done ✓' : 'pending';
+    document.getElementById('gnBadge').className = tasksDone.gn ? 'task-badge done' : 'task-badge pending';
+    document.getElementById('deployBadge').innerText = tasksDone.deploy ? 'done ✓' : 'pending';
+    document.getElementById('deployBadge').className = tasksDone.deploy ? 'task-badge done' : 'task-badge pending';
+  }
 
   function addLog(msg, type = 'info') {
     const logBox = document.getElementById('logBox');
+    const time = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute:'2-digit', second:'2-digit' });
     const line = document.createElement('div');
     line.className = 'log-line';
-    const time = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     let colorClass = '';
     if (type === 'ok') colorClass = 'ok';
     else if (type === 'err') colorClass = 'err';
     else if (type === 'warn') colorClass = 'warn';
     else colorClass = 'info';
-    line.innerHTML = `<span class="ts">[${time}]</span> <span class="${colorClass}">${msg}</span>`;
+    line.innerHTML = `<span class="log-time">[${time}]</span> <span class="${colorClass}">${msg}</span>`;
     logBox.appendChild(line);
     line.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
-  async function fetchGasAndUpdate() {
+  async function fetchGas() {
     if (!provider) return;
     try {
       const feeData = await provider.getFeeData();
-      const gasPriceGwei = parseFloat(ethers.formatUnits(feeData.gasPrice, 'gwei'));
-      const estCostEth = (gasPriceGwei * 60000) / 1e9;
-      document.getElementById('gasPrice').innerText = gasPriceGwei.toFixed(2);
-      document.getElementById('gasCost').innerText = estCostEth.toFixed(8);
-    } catch (e) { /* silent */ }
+      const gasGwei = parseFloat(ethers.formatUnits(feeData.gasPrice, 'gwei'));
+      const estCost = (gasGwei * 65000) / 1e9;
+      document.getElementById('gasPriceDisplay').innerHTML = `${gasGwei.toFixed(2)} Gwei`;
+      document.getElementById('gasCostDisplay').innerHTML = `${estCost.toFixed(8)} ETH`;
+    } catch (e) {}
   }
 
-  async function lowGasGuard() {
-    if (!document.getElementById('gasWaitToggle')?.checked) return true;
+  async function waitForLowGas() {
+    const toggle = document.getElementById('lowGasToggle')?.checked;
+    if (!toggle) return true;
     if (!provider) return true;
     const feeData = await provider.getFeeData();
-    const gasGwei = parseFloat(ethers.formatUnits(feeData.gasPrice, 'gwei'));
-    if (gasGwei > 0.03) {
-      addLog(`⏳ Gas is ${gasGwei.toFixed(2)} Gwei > threshold. Waiting 6s...`, 'warn');
-      await new Promise(r => setTimeout(r, 6000));
-      return lowGasGuard(); // re-check
+    let gasGwei = parseFloat(ethers.formatUnits(feeData.gasPrice, 'gwei'));
+    let attempts = 0;
+    while (gasGwei > 0.035 && attempts < 8) {
+      addLog(`⏳ Gas ${gasGwei.toFixed(2)} Gwei > 0.035, waiting 5s...`, 'warn');
+      await new Promise(r => setTimeout(r, 5000));
+      const newFee = await provider.getFeeData();
+      gasGwei = parseFloat(ethers.formatUnits(newFee.gasPrice, 'gwei'));
+      attempts++;
+    }
+    if (gasGwei > 0.05) {
+      addLog(`⚠️ Gas still ${gasGwei.toFixed(2)} Gwei, but proceeding (Base is cheap anyway)`, 'warn');
     }
     return true;
   }
 
-  async function withGasOptions() {
-    if (!provider) return {};
+  async function getOptimalGasPrice() {
+    if (!provider) return undefined;
     const feeData = await provider.getFeeData();
     let gasPrice = feeData.gasPrice;
     if (gasPrice && gasPrice > 0n) {
+      // 5% discount for conservative approach
       gasPrice = (gasPrice * 95n) / 100n;
+      if (gasPrice < 100000000n) gasPrice = 100000000n; // min 0.1 Gwei
     }
-    return { gasPrice: gasPrice || undefined };
+    return { gasPrice: gasPrice };
   }
 
-  function renderTasks() {
-    const container = document.getElementById('taskList');
-    if (!container) return;
-    container.innerHTML = TASKS.map(task => {
-      const st = taskState[task.id];
-      const statusClass = st.status;
-      const hashDisplay = st.txHash ? `<div class="task-hash" onclick="window.open('https://basescan.org/tx/${st.txHash}','_blank')">🔍 view on BaseScan ↗</div>` : '';
-      const isDisabled = (st.status === 'running' || isRunningAll || !userAddress) ? 'disabled' : '';
-      return `
-        <div class="task ${statusClass}">
-          <div class="task-icon">${task.icon}</div>
-          <div class="task-body">
-            <div class="task-name">${task.name}</div>
-            <div class="task-desc">${task.desc}</div>
-            ${hashDisplay}
-          </div>
-          <div class="task-status">
-            <span class="badge ${st.status}">${st.status.toUpperCase()}</span>
-            <button class="run-btn" onclick="runSingleTask('${task.id}')" ${isDisabled}>Run</button>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  function updateStatsUI() {
-    const doneCount = TASKS.filter(t => taskState[t.id].status === 'done').length;
-    const points = TASKS.filter(t => taskState[t.id].status === 'done').reduce((sum, t) => sum + t.pts, 0);
-    document.getElementById('statDone').innerText = `${doneCount}/${TASKS.length}`;
-    document.getElementById('statSpent').innerText = totalSpentEth.toFixed(6);
-    document.getElementById('statScore').innerText = `${points} pts`;
-  }
-
-  // ---------- TASK IMPLEMENTATIONS (Base-compatible) ----------
-  async function runSwap() {
-    const routerAddr = CONTRACTS.AERO_ROUTER;
-    const wethAddr = CONTRACTS.WETH;
-    const usdcAddr = CONTRACTS.USDC;
-    const abi = [
-      'function swapExactETHForTokens(uint amountOutMin, tuple(address from, address to, bool stable, address factory)[] routes, address to, uint deadline) payable returns (uint[])'
-    ];
-    const contract = new ethers.Contract(routerAddr, abi, signer);
-    let ethAmount = ethers.parseEther(jitterAmount(0.0001).toFixed(8));
-    if (ethAmount === 0n) ethAmount = ethers.parseEther("0.00008");
-    const routes = [{
-      from: wethAddr,
-      to: usdcAddr,
-      stable: false,
-      factory: '0x420DD381b31aEf6683db6B902084cB0FFECe40Da'
-    }];
-    const deadline = Math.floor(Date.now() / 1000) + 400;
-    const gasOpts = await withGasOptions();
-    const tx = await contract.swapExactETHForTokens(0n, routes, userAddress, deadline, { value: ethAmount, ...gasOpts });
-    addLog(`🔄 Swap sent: ${tx.hash}`, 'info');
-    await tx.wait();
-    totalSpentEth += parseFloat(ethers.formatEther(ethAmount));
-    return tx.hash;
-  }
-
-  async function runDeploy() {
-    const bytecode = "0x6080604052348015600f57600080fd5b5060405161011e38038061011e833981016040819052602c91603b565b600080556044565b600060208284031215604c57600080fd5b505191905056fe6080604052348015600f57600080fd5b506000805560aa806100226000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c806360fe47b11460375780633fa4f24514604e575b600080fd5b604c60043603810190604891906083565b6063565b005b60546069565b6040516060919060ab565b60405180910390f35b8060008190555050565b60008054905090565b600060208284031215609457600080fd5b8135905092915050565b60a58160a1565b82525050565b600060208201905060be6000830184609e565b9291505056fea2646970667358221220123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef64736f6c63430008130033";
-    const gasOpts = await withGasOptions();
-    const tx = await signer.sendTransaction({ data: bytecode, ...gasOpts });
-    addLog(`📦 Deploy tx: ${tx.hash}`, 'info');
-    const receipt = await tx.wait();
-    const deployedAddr = receipt.contractAddress;
-    addLog(`✅ Contract deployed at ${deployedAddr.slice(0, 10)}…`, 'ok');
-    return tx.hash;
-  }
-
-  async function runBridge() {
-    const bridgeAbi = ['function depositETH(uint32 _minGasLimit, bytes calldata _extraData) payable'];
-    const bridge = new ethers.Contract(CONTRACTS.BASE_BRIDGE, bridgeAbi, signer);
-    const amount = ethers.parseEther(jitterAmount(0.00005).toFixed(8));
-    const gasOpts = await withGasOptions();
-    const tx = await bridge.depositETH(200000, "0x", { value: amount, ...gasOpts });
-    addLog(`🌉 Bridge deposit: ${tx.hash}`, 'info');
-    await tx.wait();
-    totalSpentEth += parseFloat(ethers.formatEther(amount));
-    return tx.hash;
-  }
-
-  async function runSelfCall() {
-    const minimalStoreBytecode = "0x6080604052348015600f57600080fd5b5060405161011e38038061011e833981016040819052602c91603b565b600080556044565b600060208284031215604c57600080fd5b505191905056fe6080604052348015600f57600080fd5b506000805560aa806100226000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c806360fe47b11460375780633fa4f24514604e575b600080fd5b604c60043603810190604891906083565b6063565b005b60546069565b6040516060919060ab565b60405180910390f35b8060008190555050565b60008054905090565b600060208284031215609457600080fd5b8135905092915050565b60a58160a1565b82525050565b600060208201905060be6000830184609e565b9291505056fea2646970667358221220";
-    const deployTx = await signer.sendTransaction({ data: minimalStoreBytecode, ...(await withGasOptions()) });
-    await deployTx.wait();
-    const receipt = await deployTx.wait();
-    const contractAddr = receipt.contractAddress;
-    const iface = new ethers.Interface(['function set(uint256 value)']);
-    const callData = iface.encodeFunctionData('set', [BigInt(Math.floor(Date.now() / 1000))]);
-    const callTx = await signer.sendTransaction({ to: contractAddr, data: callData, ...(await withGasOptions()) });
-    addLog(`💡 Contract call stored timestamp: ${callTx.hash}`, 'info');
-    await callTx.wait();
-    return callTx.hash;
-  }
-
-  async function runNFT() {
-    const randomData = ethers.hexlify(ethers.toUtf8Bytes(`TUSK_ONCHAIN_${Date.now()}`));
+  // ---------- TASKS (ON-CHAIN) ----------
+  async function sendGmOnChain() {
+    addLog("🌅 Sending Good Morning (GM) on-chain...", "info");
+    const message = ethers.hexlify(ethers.toUtf8Bytes(`gm ${new Date().toISOString().slice(0,10)} from TUSK`));
+    const gasOpts = await getOptimalGasPrice();
     const tx = await signer.sendTransaction({
       to: userAddress,
       value: 0n,
-      data: randomData,
-      ...(await withGasOptions())
+      data: message,
+      ...gasOpts
     });
-    addLog(`🖼️ On-chain inscription / NFT activity: ${tx.hash}`, 'info');
+    addLog(`📡 GM tx sent: ${tx.hash.slice(0, 18)}...`, "info");
     await tx.wait();
+    addLog(`✅ GM posted on-chain! (BaseScan: ${tx.hash.slice(0, 10)}...)`, "ok");
     return tx.hash;
   }
 
-  async function runMultisend() {
-    const targets = [
-      "0x000000000000000000000000000000000000dEaD",
-      "0x4200000000000000000000000000000000000015",
-      "0x3154Cf16ccdb4C6d922629664174b904d80F2C35"
-    ];
-    let lastHash = null;
-    for (const target of targets) {
-      const tx = await signer.sendTransaction({ to: target, value: 0n, ...(await withGasOptions()) });
-      lastHash = tx.hash;
-      addLog(`📤 Transfer to ${target.slice(0, 8)}…`, 'info');
-      await tx.wait();
-      await new Promise(r => setTimeout(r, 500));
-    }
-    return lastHash;
+  async function sendGnOnChain() {
+    addLog("🌙 Sending Good Night (GN) on-chain...", "info");
+    const message = ethers.hexlify(ethers.toUtf8Bytes(`gn ${new Date().toISOString()} - sleep tight`));
+    const gasOpts = await getOptimalGasPrice();
+    const tx = await signer.sendTransaction({
+      to: userAddress,
+      value: 0n,
+      data: message,
+      ...gasOpts
+    });
+    addLog(`📡 GN tx sent: ${tx.hash.slice(0, 18)}...`, "info");
+    await tx.wait();
+    addLog(`✅ GN recorded on-chain`, "ok");
+    return tx.hash;
   }
 
-  const runners = {
-    swap: runSwap,
-    deploy: runDeploy,
-    bridge: runBridge,
-    selfcall: runSelfCall,
-    nft: runNFT,
-    multisend: runMultisend
-  };
+  async function deployLightContract() {
+    addLog("📦 Deploying minimal contract (storage) on Base...", "info");
+    // ultra compact contract: stores a uint256, setter/getter (very cheap)
+    const bytecode = "0x6080604052348015600f57600080fd5b5060405161013a38038061013a833981016040819052602c91603b565b6000556044565b600060208284031215604c57600080fd5b505191905056fe6080604052348015600f57600080fd5b506004361060325760003560e01c806360fe47b11460375780633fa4f24514604e575b600080fd5b604c60043603810190604891906083565b6063565b005b60546069565b6040516060919060ab565b60405180910390f35b8060008190555050565b60008054905090565b600060208284031215609457600080fd5b8135905092915050565b60a58160a1565b82525050565b600060208201905060be6000830184609e565b9291505056fea2646970667358221220123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef64736f6c63430008130033";
+    const gasOpts = await getOptimalGasPrice();
+    const tx = await signer.sendTransaction({ data: bytecode, ...gasOpts });
+    addLog(`⛓️ Deploy tx: ${tx.hash.slice(0, 18)}...`, "info");
+    const receipt = await tx.wait();
+    const contractAddress = receipt.contractAddress;
+    addLog(`🎉 Contract deployed at ${contractAddress.slice(0, 12)}... on Base!`, "ok");
+    return tx.hash;
+  }
 
-  async function runSingleTask(taskId) {
+  // ----- ONE CLICK EXECUTION (Sequential) -----
+  async function runDailyTasks() {
     if (!userAddress || !signer) {
-      addLog("🔌 Please connect wallet first", "err");
+      addLog("🔌 Wallet not connected. Click 'Connect Wallet' first.", "err");
       return;
     }
-    if (taskState[taskId].status === 'running') {
-      addLog(`⚠️ ${taskId} already running`, 'warn');
+    if (isFarming) {
+      addLog("⏳ Farming already in progress, wait.", "warn");
       return;
     }
-    if (isRunningAll) return;
+    isFarming = true;
+    const farmBtn = document.getElementById('farmNowBtn');
+    farmBtn.disabled = true;
+    farmBtn.innerHTML = "⏳ PROCESSING...";
+    addLog("🚜 Starting one-click farming (GM + GN + Deploy) on Base", "info");
+    
+    await waitForLowGas();
 
-    await lowGasGuard();
+    const skip = document.getElementById('skipDoneToggle')?.checked;
 
-    taskState[taskId].status = 'running';
-    renderTasks();
-    try {
-      const hash = await runners[taskId]();
-      taskState[taskId].status = 'done';
-      taskState[taskId].txHash = hash;
-      addLog(`✅ ${TASKS.find(t => t.id === taskId).name} completed! TX: ${hash.slice(0, 14)}...`, 'ok');
-    } catch (err) {
-      taskState[taskId].status = 'failed';
-      let errMsg = err?.shortMessage || err?.message || String(err);
-      if (errMsg.includes('User rejected') || errMsg.includes('denied')) {
-        addLog(`❌ ${TASKS.find(t => t.id === taskId).name} rejected in MetaMask.`, 'err');
-      } else {
-        addLog(`❌ ${taskId} failed: ${errMsg.slice(0, 100)}`, 'err');
+    // 1) GM
+    if (skip && tasksDone.gm) {
+      addLog("⏩ Skipping GM (already done today)", "warn");
+    } else {
+      try {
+        await sendGmOnChain();
+        tasksDone.gm = true;
+        persistDaily();
+        updateTaskUI();
+        await new Promise(r => setTimeout(r, 1200));
+      } catch (err) {
+        let msg = err?.shortMessage || err?.message || String(err);
+        addLog(`❌ GM failed: ${msg.slice(0, 100)}`, "err");
       }
     }
-    renderTasks();
-    updateStatsUI();
+
+    // 2) GN
+    if (skip && tasksDone.gn) {
+      addLog("⏩ Skipping GN (already done today)", "warn");
+    } else {
+      try {
+        await sendGnOnChain();
+        tasksDone.gn = true;
+        persistDaily();
+        updateTaskUI();
+        await new Promise(r => setTimeout(r, 1200));
+      } catch (err) {
+        let msg = err?.shortMessage || err?.message || String(err);
+        addLog(`❌ GN failed: ${msg.slice(0, 100)}`, "err");
+      }
+    }
+
+    // 3) Deploy contract
+    if (skip && tasksDone.deploy) {
+      addLog("⏩ Skipping contract deploy (already done today)", "warn");
+    } else {
+      try {
+        await deployLightContract();
+        tasksDone.deploy = true;
+        persistDaily();
+        updateTaskUI();
+      } catch (err) {
+        let msg = err?.shortMessage || err?.message || String(err);
+        addLog(`❌ Deploy failed: ${msg.slice(0, 100)}`, "err");
+      }
+    }
+
+    addLog("✨ Daily on-chain session finished! Check BaseScan activity.", "ok");
+    isFarming = false;
+    farmBtn.disabled = false;
+    farmBtn.innerHTML = "🌿 START DAILY TASKS";
   }
 
-  async function runAllTasks() {
-    if (!userAddress) {
-      addLog("❗ Connect wallet before running all tasks", "err");
-      return;
-    }
-    if (isRunningAll) return;
-    isRunningAll = true;
-    document.getElementById('runAllBtn').disabled = true;
-    addLog("🚀 Starting full farming session on Base Mainnet...", "info");
-    for (const task of TASKS) {
-      const skipFlag = document.getElementById('skipToggle')?.checked;
-      if (skipFlag && taskState[task.id].status === 'done') {
-        addLog(`⏩ Skipping ${task.name} (already done this session)`, 'warn');
-        continue;
-      }
-      await runSingleTask(task.id);
-      if (taskState[task.id].status !== 'done') {
-        addLog(`⚠️ ${task.name} failed, moving to next`, 'warn');
-      }
-      await new Promise(r => setTimeout(r, 1800));
-    }
-    addLog("🎉 Farming session completed! Check your BaseScan activity.", 'ok');
-    isRunningAll = false;
-    document.getElementById('runAllBtn').disabled = false;
-  }
-
-  // ------ CONNECT WALLET (Fixed for Vercel/Production) ------
-  window.connectWalletHandler = async function () {
+  // ---------- CONNECT WALLET (FIXED for Vercel / modern MetaMask) ----------
+  async function connectWallet() {
     if (!window.ethereum) {
-      alert("❌ MetaMask not detected! Please install MetaMask extension and refresh.");
-      addLog("MetaMask not found", "err");
+      alert("❌ MetaMask not found. Please install MetaMask extension.");
+      addLog("MetaMask missing", "err");
       return;
     }
     try {
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const chainIdHex = '0x2105'; // Base Mainnet
+      // switch to Base Mainnet (chainId 8453 = 0x2105)
       try {
-        await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: chainIdHex }] });
-      } catch (switchError) {
-        if (switchError.code === 4902) {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x2105' }]
+        });
+      } catch (switchErr) {
+        if (switchErr.code === 4902) {
           await window.ethereum.request({
             method: 'wallet_addEthereumChain',
             params: [{
-              chainId: chainIdHex,
+              chainId: '0x2105',
               chainName: 'Base Mainnet',
               nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
               rpcUrls: ['https://mainnet.base.org'],
@@ -763,36 +693,57 @@
             }]
           });
         } else {
-          throw switchError;
+          throw switchErr;
         }
       }
       provider = new ethers.BrowserProvider(window.ethereum);
       signer = await provider.getSigner();
       userAddress = await signer.getAddress();
-      const shortAddr = userAddress.slice(0, 6) + "..." + userAddress.slice(-4);
-      document.getElementById('walletLabel').innerText = shortAddr;
-      document.getElementById('walletBtn').classList.add('connected');
+      const short = userAddress.slice(0, 6) + "..." + userAddress.slice(-4);
+      document.getElementById('walletLabel').innerText = short;
+      const walletBtn = document.getElementById('walletBtn');
+      walletBtn.classList.add('connected');
       document.getElementById('walletDot').classList.add('live');
-      document.getElementById('runAllBtn').innerText = "⚡ RUN ALL TASKS (Base Mainnet)";
-      document.getElementById('runAllBtn').disabled = false;
-      addLog(`✅ Wallet connected: ${userAddress} on Base Mainnet`, 'ok');
-      fetchGasAndUpdate();
-      setInterval(fetchGasAndUpdate, 12000);
-      // listen account changes
-      window.ethereum.on('accountsChanged', (accs) => { if (accs.length === 0) location.reload(); else location.reload(); });
-      window.ethereum.on('chainChanged', () => location.reload());
+      addLog(`✅ Wallet connected: ${userAddress} on Base Mainnet`, "ok");
+      fetchGas();
+      setInterval(() => fetchGas(), 15000);
+      // reload state after connection
+      loadDailyState();
+      
+      // Listen to account/network changes
+      window.ethereum.on('accountsChanged', () => window.location.reload());
+      window.ethereum.on('chainChanged', () => window.location.reload());
     } catch (err) {
-      addLog(`Connection error: ${err.message}`, 'err');
+      addLog(`Connection error: ${err.message}`, "err");
     }
-  };
+  }
 
-  document.getElementById('walletBtn').onclick = () => window.connectWalletHandler();
-  window.runSingleTask = runSingleTask;
-  window.runAll = runAllTasks;
-  document.getElementById('runAllBtn').onclick = () => runAllTasks();
-
-  renderTasks();
-  updateStatsUI();
+  // bindings
+  document.getElementById('walletBtn').onclick = connectWallet;
+  document.getElementById('farmNowBtn').onclick = runDailyTasks;
+  
+  // load initial daily storage
+  loadDailyState();
+  // try to recover provider if already connected (page refresh)
+  (async function init() {
+    if (window.ethereum && window.ethereum.selectedAddress) {
+      try {
+        provider = new ethers.BrowserProvider(window.ethereum);
+        const network = await provider.getNetwork();
+        if (Number(network.chainId) === 8453) {
+          signer = await provider.getSigner();
+          userAddress = await signer.getAddress();
+          const short = userAddress.slice(0,6)+"..."+userAddress.slice(-4);
+          document.getElementById('walletLabel').innerText = short;
+          document.getElementById('walletBtn').classList.add('connected');
+          document.getElementById('walletDot').classList.add('live');
+          addLog(`🔄 Reconnected: ${userAddress}`, "ok");
+          fetchGas();
+          loadDailyState();
+        }
+      } catch(e) { /* silent */ }
+    }
+  })();
 </script>
 </body>
 </html>
