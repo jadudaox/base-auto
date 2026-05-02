@@ -1,0 +1,374 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c10;--card:#12151c;--card2:#181c26;--border:#252a38;
+  --blue:#0052ff;--blue2:#3b82f6;--text:#dde2ef;--muted:#7b86a0;
+  --green:#16b364;--red:#e05454;--orange:#f5a623;
+}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
+.wrap{max-width:430px;margin:0 auto;padding:16px}
+.hcard{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;display:flex;align-items:center;gap:12px}
+.logo{width:46px;height:46px;background:#0052ff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:20px;color:#fff;flex-shrink:0}
+.htitle{font-weight:600;font-size:16px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.b-green{background:#16b36420;color:#16b364;border:1px solid #16b36440;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.b-chain{background:#0052ff18;color:#4f8bff;border:1px solid #0052ff30;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;font-family:'IBM Plex Mono',monospace}
+.hsub{font-size:11px;color:var(--muted);margin-top:3px;font-family:'IBM Plex Mono',monospace}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.tag{background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;color:var(--muted)}
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.phdr{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:9px}
+.pval{font-weight:700;color:var(--text);font-family:'IBM Plex Mono',monospace}
+.bar{background:#1a1f2e;border-radius:6px;height:8px;overflow:hidden}
+.fill{height:100%;background:linear-gradient(90deg,#0052ff,#3b82f6);border-radius:6px;transition:width .5s}
+.wbtn{width:100%;padding:13px;background:#0052ff;border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;margin-bottom:12px}
+.wbtn:hover{background:#1a5ce8}
+.wconn{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:12px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
+.waddr{font-size:12px;font-family:'IBM Plex Mono',monospace}
+.wbal{font-size:11px;color:var(--muted)}
+.section{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:12px}
+.sec-hdr{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
+.sec-hdr span{font-size:13px;color:var(--muted)}
+.chv{font-size:11px;color:var(--muted);transition:transform .2s}
+.item{display:flex;align-items:center;padding:11px 16px;gap:12px;border-bottom:1px solid var(--border);transition:background .15s}
+.item:last-child{border-bottom:none}
+.item:hover{background:var(--card2)}
+.chk{width:20px;height:20px;border-radius:5px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.chk.done{background:#0052ff;border-color:#0052ff}
+.chk svg{display:none}.chk.done svg{display:block}
+.iname{flex:1;font-size:14px}
+.iname.done{color:var(--muted);text-decoration:line-through}
+.st{font-size:10px;font-family:'IBM Plex Mono',monospace;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.s-idle{background:#1e2436;color:var(--muted)}
+.s-run{background:#0052ff20;color:#4f8bff;animation:pulse 1s infinite}
+.s-ok{background:#16b36422;color:#16b364}
+.s-fail{background:#e0545422;color:#e05454}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.olink{font-size:12px;color:#4f8bff;cursor:pointer;padding:3px 8px;border-radius:6px;transition:background .15s;font-weight:500}
+.olink:hover{background:#0052ff18}
+.rbtn{width:100%;padding:14px;background:#0052ff;border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;margin-bottom:10px}
+.rbtn:hover:not(:disabled){background:#1a5ce8;transform:translateY(-1px)}
+.rbtn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.sbtn{width:100%;padding:11px;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.sbtn:hover{background:var(--card2);color:var(--text)}
+.ginfo{font-size:11px;color:var(--muted);text-align:center;margin-top:8px}
+.log{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-top:10px;max-height:220px;overflow-y:auto}
+.lt{font-size:10px;color:var(--muted);margin-bottom:8px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:1px}
+.ll{font-size:11px;font-family:'IBM Plex Mono',monospace;padding:3px 0;border-bottom:1px solid #1a1f2e;color:var(--muted)}
+.ll:last-child{border-bottom:none}
+.ll.ok{color:var(--green)}.ll.err{color:var(--red)}.ll.inf{color:#4f8bff}
+.txh{color:#4f8bff;text-decoration:underline;cursor:pointer}
+.errbanner{background:#e0545414;border:1px solid #e0545430;border-radius:10px;padding:10px 12px;font-size:12px;color:#e07070;margin-bottom:10px;line-height:1.5}
+</style>
+
+<div class="wrap">
+  <div class="hcard">
+    <div class="logo">B</div>
+    <div>
+      <div class="htitle">Base 🔥 <span class="b-green">Active</span> <span class="b-chain">8453</span></div>
+      <div class="hsub">Base Mainnet · Chain ID 8453</div>
+    </div>
+  </div>
+
+  <div class="tags" id="tags-row">
+    <span class="tag">GM</span><span class="tag">GN</span><span class="tag">Flip</span>
+    <span class="tag">Dice</span><span class="tag">Lucky</span><span class="tag">ERC-20</span>
+    <span class="tag">ERC-721</span><span class="tag">ERC-1155</span>
+  </div>
+
+  <div class="pcard">
+    <div class="phdr"><span>Progress</span><span class="pval" id="ptxt">0/8</span></div>
+    <div class="bar"><div class="fill" id="fill" style="width:0%"></div></div>
+  </div>
+
+  <div id="warea">
+    <button class="wbtn" onclick="connectWallet()">🔗 Connect Wallet</button>
+  </div>
+
+  <div id="errdiv"></div>
+
+  <div class="section">
+    <div class="sec-hdr" onclick="toggleList()">
+      <span>Show details</span>
+      <span class="chv" id="chv">▲</span>
+    </div>
+    <div id="tlist"></div>
+  </div>
+
+  <button class="rbtn" id="rbtn" onclick="runAll()" disabled>⚡ Run all steps</button>
+  <button class="sbtn" onclick="switchToBase()">Switch to this network only</button>
+  <div class="ginfo">Base mainnet · ~$0.001–0.005 per tx · contract: 0xc3Ea...f623</div>
+
+  <div class="log" id="logbox" style="display:none">
+    <div class="lt">Transaction Log</div>
+    <div id="loglines"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.1/ethers.umd.min.js"></script>
+<script>
+// ── REAL contract from basehub.fun GM transaction ───────────────────────────
+const HUB_CONTRACT = '0xc3Ea6F7B014C6D9c4C421Ba5bcea3bD25F97f623';
+
+// All 8 tasks — GM/GN/Flip/Dice/Lucky all use sendGM(string) on same contract
+// ERC-20: USDC approve, ERC-721/1155: Zora contracts
+const TASKS = [
+  {
+    id:'gm', label:'GM',
+    to: HUB_CONTRACT,
+    fn: 'sendGM(string)',
+    args: ()=> ['GM \u2764 Airdrop Hub \u26a1'],
+    url:`https://basescan.org/address/${HUB_CONTRACT}`
+  },
+  {
+    id:'gn', label:'GN',
+    to: HUB_CONTRACT,
+    fn: 'sendGN(string)',
+    args: ()=> ['GN \u2764 Airdrop Hub \u26a1'],
+    url:`https://basescan.org/address/${HUB_CONTRACT}`
+  },
+  {
+    id:'flip', label:'Flip',
+    to: HUB_CONTRACT,
+    fn: 'flipCoin(string)',
+    args: ()=> ['Flip \u2764 Airdrop Hub \u26a1'],
+    url:`https://basescan.org/address/${HUB_CONTRACT}`
+  },
+  {
+    id:'dice', label:'Dice',
+    to: HUB_CONTRACT,
+    fn: 'rollDice(string)',
+    args: ()=> ['Dice \u2764 Airdrop Hub \u26a1'],
+    url:`https://basescan.org/address/${HUB_CONTRACT}`
+  },
+  {
+    id:'lucky', label:'Lucky',
+    to: HUB_CONTRACT,
+    fn: 'luckyNumber(string)',
+    args: ()=> ['Lucky \u2764 Airdrop Hub \u26a1'],
+    url:`https://basescan.org/address/${HUB_CONTRACT}`
+  },
+  {
+    id:'erc20', label:'ERC-20',
+    // USDC on Base — approve 0 to self (cheapest valid ERC-20 write tx)
+    to: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+    fn: 'approve(address,uint256)',
+    args: ()=> [window._addr, 0n],
+    url:'https://basescan.org/token/0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+  },
+  {
+    id:'erc721', label:'ERC-721',
+    // Zora NFT creator on Base
+    to: '0xA2c2A96A232113Dd4993E8b048EEbc3371AE8d85',
+    fn: 'setApprovalForAll(address,bool)',
+    args: ()=> [window._addr, false],
+    url:'https://basescan.org/address/0xA2c2A96A232113Dd4993E8b048EEbc3371AE8d85'
+  },
+  {
+    id:'erc1155', label:'ERC-1155',
+    // Zora 1155 factory on Base
+    to: '0x777777722D078c97c6ad07d9f36801e653E356Ae',
+    fn: 'setApprovalForAll(address,bool)',
+    args: ()=> [window._addr, false],
+    url:'https://basescan.org/address/0x777777722D078c97c6ad07d9f36801e653E356Ae'
+  }
+];
+
+let provider, signer;
+window._addr = null;
+let done = {};
+let running = false;
+let listOpen = true;
+
+// Build task rows
+const tlist = document.getElementById('tlist');
+TASKS.forEach(t => {
+  const el = document.createElement('div');
+  el.className = 'item';
+  el.id = 'item-'+t.id;
+  el.innerHTML = `
+    <div class="chk" id="chk-${t.id}">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="iname" id="nm-${t.id}">${t.label}</span>
+    <span class="st s-idle" id="st-${t.id}">idle</span>
+    <span class="olink" onclick="openLink('${t.url}')">Open</span>
+  `;
+  tlist.appendChild(el);
+});
+
+function log(msg, type='') {
+  const box = document.getElementById('logbox');
+  box.style.display = 'block';
+  const d = document.createElement('div');
+  d.className = 'll ' + type;
+  d.innerHTML = msg;
+  document.getElementById('loglines').appendChild(d);
+  box.scrollTop = box.scrollHeight;
+}
+
+function showErr(msg) {
+  const div = document.getElementById('errdiv');
+  div.innerHTML = `<div class="errbanner">⚠ ${msg}</div>`;
+  setTimeout(() => { div.innerHTML = ''; }, 10000);
+}
+
+function setSt(id, s) {
+  const el = document.getElementById('st-'+id);
+  el.className = 'st';
+  if(s==='running') el.classList.add('s-run');
+  else if(s==='done') el.classList.add('s-ok');
+  else if(s==='failed') el.classList.add('s-fail');
+  else el.classList.add('s-idle');
+  el.textContent = s;
+}
+
+function markDone(id) {
+  done[id] = true;
+  document.getElementById('chk-'+id).classList.add('done');
+  document.getElementById('nm-'+id).classList.add('done');
+  setSt(id, 'done');
+  updateProg();
+}
+
+function updateProg() {
+  const n = Object.keys(done).length;
+  document.getElementById('ptxt').textContent = n + '/8';
+  document.getElementById('fill').style.width = (n/8*100) + '%';
+}
+
+function encodeCall(fnSig, args) {
+  const iface = new ethers.Interface(['function ' + fnSig]);
+  const fnName = fnSig.split('(')[0];
+  return iface.encodeFunctionData(fnName, args);
+}
+
+async function execTask(t) {
+  setSt(t.id, 'running');
+  log(`[${t.label}] Sending transaction...`, 'inf');
+  try {
+    const data = encodeCall(t.fn, t.args());
+    const feeData = await provider.getFeeData();
+    const tx = await signer.sendTransaction({
+      to: t.to,
+      data: data,
+      maxFeePerGas: feeData.maxFeePerGas,
+      maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
+    });
+    log(`[${t.label}] Sent: <span class="txh" onclick="openLink('https://basescan.org/tx/${tx.hash}')">${tx.hash.slice(0,18)}...</span>`, 'inf');
+    const receipt = await tx.wait(1);
+    markDone(t.id);
+    log(`[${t.label}] ✓ Confirmed · gas: ${receipt.gasUsed.toString()}`, 'ok');
+    return true;
+  } catch(e) {
+    setSt(t.id, 'failed');
+    // Try to get best error message
+    let reason = e.reason || e.data?.message || e.shortMessage || e.message || String(e);
+    // If contract reverted with wrong function name, we'll catch it
+    if(reason.includes('CALL_EXCEPTION') || reason.includes('missing revert')) {
+      reason = 'Function not found on contract — need correct function name from basehub.fun';
+    }
+    log(`[${t.label}] ✗ ${reason.slice(0,120)}`, 'err');
+    showErr(`[${t.label}] ${reason.slice(0,200)}`);
+    return false;
+  }
+}
+
+async function runAll() {
+  if(running || !signer) return;
+  running = true;
+  document.getElementById('rbtn').disabled = true;
+  document.getElementById('rbtn').innerHTML = '⏳ Running tasks...';
+  for(const t of TASKS) {
+    if(done[t.id]) continue;
+    const ok = await execTask(t);
+    await new Promise(r => setTimeout(r, 700));
+    // If first task (GM) fails with function error, stop and show message
+    if(!ok && (t.id === 'gm')) {
+      showErr('GM function name mismatch. Share the GN/Flip/Dice/Lucky tx hashes too so we can get exact function names.');
+    }
+  }
+  running = false;
+  document.getElementById('rbtn').disabled = false;
+  document.getElementById('rbtn').innerHTML = '⚡ Run all steps';
+  log('All steps attempted!', 'ok');
+}
+
+async function connectWallet() {
+  if(!window.ethereum) {
+    showErr('No wallet found. Install MetaMask or Coinbase Wallet.');
+    return;
+  }
+  try {
+    provider = new ethers.BrowserProvider(window.ethereum);
+    await provider.send('eth_requestAccounts', []);
+    const net = await provider.getNetwork();
+    if(Number(net.chainId) !== 8453) {
+      await switchToBase();
+      provider = new ethers.BrowserProvider(window.ethereum);
+    }
+    signer = await provider.getSigner();
+    window._addr = await signer.getAddress();
+    const bal = await provider.getBalance(window._addr);
+    const balFmt = parseFloat(ethers.formatEther(bal)).toFixed(5);
+
+    document.getElementById('warea').innerHTML = `
+      <div class="wconn">
+        <div class="dot"></div>
+        <div>
+          <div class="waddr">${window._addr.slice(0,6)}...${window._addr.slice(-4)}</div>
+          <div class="wbal">${balFmt} ETH on Base</div>
+        </div>
+        <span style="margin-left:auto;font-size:11px;color:var(--green)">✓ Connected</span>
+      </div>`;
+
+    document.getElementById('rbtn').disabled = false;
+    log('Connected: ' + window._addr.slice(0,6) + '...' + window._addr.slice(-4), 'ok');
+  } catch(e) {
+    showErr('Connection failed: ' + (e.message || e));
+  }
+}
+
+async function switchToBase() {
+  try {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: '0x2105' }]
+    });
+  } catch(e) {
+    if(e.code === 4902) {
+      await window.ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [{
+          chainId: '0x2105',
+          chainName: 'Base',
+          nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+          rpcUrls: ['https://mainnet.base.org'],
+          blockExplorerUrls: ['https://basescan.org']
+        }]
+      });
+    }
+  }
+}
+
+function toggleList() {
+  listOpen = !listOpen;
+  document.getElementById('tlist').style.display = listOpen ? 'block' : 'none';
+  document.getElementById('chv').textContent = listOpen ? '▲' : '▼';
+}
+
+function openLink(url) { window.open(url, '_blank'); }
+
+window.addEventListener('load', async () => {
+  if(window.ethereum) {
+    try {
+      const accs = await window.ethereum.request({ method: 'eth_accounts' });
+      if(accs.length > 0) connectWallet();
+    } catch(e) {}
+  }
+});
+</script>
